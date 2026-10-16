@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalamaKiganjani - Offline Safety & Protection Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-screen { background: #0f172a; color: #38bdf8; font-family: monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 text-center">
+        <h1 class="text-xl font-bold text-sky-400">SalamaKiganjani <span class="text-xs bg-sky-900 text-sky-200 px-2 py-1 rounded ml-2">Live Prototype v1.0</span></h1>
+        <p class="text-xs text-slate-400 mt-1">The Offline Safety & Protection Lifeline (USSD & Secure Dashboard Demo)</p>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8 my-auto">
+
+        <!-- SECTION 1: USSD SIMULATOR (MOBILE VIEW) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col items-center">
+            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Simulating Feature Phone (*150*00#)</h2>
+            
+            <!-- PHONE FRAME -->
+            <div class="w-full max-w-xs bg-black rounded-3xl border-4 border-slate-700 p-4 shadow-inner flex flex-col justify-between h-[420px]">
+                
+                <!-- SCREEN -->
+                <div id="ussd-screen" class="phone-screen p-4 rounded-xl h-full flex flex-col justify-between text-sm overflow-y-auto">
+                    <div>
+                        <div class="text-xs text-slate-500 border-b border-slate-800 pb-1 mb-2">USSD Session Active</div>
+                        <div id="ussd-content">
+                            Karibu SalamaKiganjani.<br>
+                            1. Ripoti Ndoa ya Utotoni<br>
+                            2. Ripoti Ukatili wa Kijinsia (GBV)<br>
+                            3. Hali ya Usalama & Msaada<br><br>
+                            Weka namba ya chaguo lako:
+                        </div>
+                    </div>
+                    
+                    <div id="stealth-indicator" class="text-[10px] text-emerald-400 hidden mt-2">
+                        🔒 Stealth Mode: Active (No traces)
+                    </div>
+                </div>
+
+                <!-- KEYPAD / CONTROLS -->
+                <div class="mt-4">
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" id="ussd-input" placeholder="Ingiza namba..." class="bg-slate-800 text-white text-xs px-3 py-2 rounded w-full border border-slate-700 focus:outline-none focus:border-sky-500">
+                        <button onclick="handleUSSDInput()" class="bg-sky-600 hover:bg-sky-500 text-white text-xs px-4 py-2 rounded font-bold">Tuma</button>
+                    </div>
+                    <div class="flex justify-between">
+                        <button onclick="resetUSSD()" class="text-[10px] text-slate-400 hover:text-white underline">Anza Upya</button>
+                        <button onclick="triggerStealthPanic()" class="bg-rose-900/60 hover:bg-rose-800 text-rose-200 text-[10px] px-2 py-1 rounded border border-rose-700 font-semibold">🚨 Panic Exit / Stealth</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECTION 2: POLICE GENDER DESK DASHBOARD (LIVE ALERTS) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col justify-between">
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-semibold text-sky-400 uppercase tracking-wider">Dawati la Jinsia - Live Dashboard</h2>
+                    <span class="flex h-3 w-3 relative">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">Real-time encrypted incoming alerts from rural field trials (Shinyanga & Dodoma).</p>
+                
+                <!-- ALERTS TABLE / FEED -->
+                <div id="alerts-container" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3 text-xs">
+                        <div class="flex justify-between text-slate-400 mb-1">
+                            <span>ID: #SK-8802</span>
+                            <span class="text-emerald-400 font-mono">[ENCRYPTED]</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">Tukio: Ndoa ya utotoni inazuiwa kijijini.</p>
+                        <div class="text-[10px] text-slate-400 mt-2 flex justify-between">
+                            <span>Eneo: Shinyanga Vijijini</span>
+                            <span class="text-amber-400 font-semibold">Inashughulikiwa</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATS FOOTER -->
+            <div class="border-t border-slate-800 pt-4 mt-4 grid grid-cols-3 text-center text-xs">
+                <div>
+                    <div class="text-slate-400">Total Reports</div>
+                    <div id="stat-total" class="font-bold text-sky-400 text-sm">14</div>
+                </div>
+                <div>
+                    <div class="text-slate-400">Anonymized</div>
+                    <div class="font-bold text-emerald-400 text-sm">100%</div>
+                </div>
+                <div>
+                    <div class="text-slate-400">Avg Response</div>
+                    <div class="font-bold text-sky-400 text-sm">45 min</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t border-slate-800 p-4 text-center text-xs text-slate-500">
+        SalamaKiganjani Platform — Built for offline resilience, data privacy, and community protection.
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let currentStep = 0;
+        let reportData = { type: '', region: '' };
+
+        function handleUSSDInput() {
+            const input = document.getElementById('ussd-input');
+            const content = document.getElementById('ussd-content');
+            const val = input.value.trim();
+            if (!val) return;
+
+            if (currentStep === 0) {
+                if (val === '1' || val === '2') {
+                    reportData.type = val === '1' ? 'Ndoa ya Utotoni' : 'Ukatili wa Kijinsia (GBV)';
+                    content.innerHTML = `Umechagua: ${reportData.type}.<br><br>Chagua Mkoa wako:<br>1. Shinyanga<br>2. Mara<br>3. Dodoma<br><br>Weka namba:`;
+                    currentStep = 1;
+                } else {
+                    content.innerHTML = `Huduma ya SalamaKiganjani ni ya siri na salama.<br>Piga *150*00# tena kuendelea.`;
+                    currentStep = 0;
+                }
+            } else if (currentStep === 1) {
+                const regions = { '1': 'Shinyanga Vijijini', '2': 'Mara - Tarime', '3': 'Dodoma Mkoa' };
+                reportData.region = regions[val] || 'Tanzania Vijijini';
+                
+                content.innerHTML = `Tafadhali thibitisha kutuma taarifa kwa siri:<br>1. Ndiyo (Tuma Msaada)<br>2. Sitisha<br><br>Weka namba:`;
+                currentStep = 2;
+            } else if (currentStep === 2) {
+                if (val === '1') {
+                    content.innerHTML = `✅ Ujumbe umetumwa kwa mafanikio!<br>Dawati la Polisi limetaarifiwa. Hakuna kumbukumbu iliyobaki kwenye simu hii.`;
+                    addNewAlert(reportData.type, reportData.region);
+                } else {
+                    content.innerHTML = `Umetoa nishati. Taarifa haikutumwa.`;
+                }
+                currentStep = 3;
+            }
+            input.value = '';
+        }
+
+        function resetUSSD() {
+            currentStep = 0;
+            document.getElementById('ussd-content').innerHTML = `Karibu SalamaKiganjani.<br>1. Ripoti Ndoa ya Utotoni<br>2. Ripoti Ukatili wa Kijinsia (GBV)<br>3. Hali ya Usalama & Msaada<br><br>Weka namba ya chaguo lako:`;
+            document.getElementById('stealth-indicator').classList.add('hidden');
+        }
+
+        function triggerStealthPanic() {
+            const screen = document.getElementById('ussd-screen');
+            screen.style.background = '#f8fafc';
+            screen.style.color = '#0f172a';
+            document.getElementById('ussd-content').innerHTML = `<strong>Hali ya Hewa Leo:</strong><br>Jua kiasi: 28°C<n>Upepo: 12 km/h<br><br>Asante kwa kutumia huduma ya utabiri wa hewa.`;
+            document.getElementById('stealth-indicator').classList.remove('hidden');
+        }
+
+        function addNewAlert(type, region) {
+            const container = document.getElementById('alerts-container');
+            const randomId = Math.floor(1000 + Math.random() * 9000);
+            const alertHTML = `
+                <div class="bg-slate-800/80 border border-emerald-500/40 rounded-xl p-3 text-xs animate-pulse">
+                    <div class="flex justify-between text-slate-400 mb-1">
+                        <span>ID: #SK-${randomId}</span>
+                        <span class="text-emerald-400 font-mono">[ENC-AES256]</span>
+                    </div>
+                    <p class="text-slate-100 font-medium">Tukio: ${type}</p>
+                    <div class="text-[10px] text-slate-400 mt-2 flex justify-between">
+                        <span>Eneo: ${region}</span>
+                        <span class="text-sky-400 font-semibold">Polisi Wanaelekea Eneo la Tukio</span>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('afterbegin', alertHTML);
+            
+            let total = document.getElementById('stat-total');
+            total.innerText = parseInt(total.innerText) + 1;
+        }
+    </script>
+</body>
+</html>
